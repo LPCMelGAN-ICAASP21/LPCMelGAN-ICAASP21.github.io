@@ -1,0 +1,427 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <title>Introducing Linear Prediction to GAN-based Vocoders</title>
+      <link rel="stylesheet" type="text/css" href="stylesheet.css"/>
+      <!-- <link rel="shortcut icon" href="../../images/taco.png"> -->
+      <script>
+         function play(path) {{
+           var player = document.getElementById('player');
+           player.src = path;
+           player.play();
+         }}
+      </script>
+      <style>
+         .audio-cell {
+         /* Center audio widgets in the table cell. */
+         text-align: center;
+         padding-bottom: 1px;
+         padding-top: 1px;
+         }
+         .audio-cell-padded {
+         text-align: center;
+         padding-bottom: 10px;
+         padding-top: 10px;
+         }
+         .audio-header {
+         /* Don't wrap header text. */
+         white-space: nowrap;
+         /* Some breaking space between headers for readability. */
+         padding-right: 5px;
+         padding-left: 5px;
+         }
+         .reference-cell {
+         /* For uniformity and to wrap long reference text, limit the reference cell's width. */
+         width: 25%;
+         padding-top: 20px;
+         padding-bottom: 20px;
+         }
+         .sample audio {
+         vertical-align: middle;
+         padding-left: 3px;
+         padding-right: 3px;
+         }
+         .round-button {
+         box-sizing: border-box;
+         display:block;
+         width:30px;
+         height:30px;
+         padding-top: 8px;
+         padding-left: 3px;
+         line-height: 6px;
+         border: 1.2px solid #000;
+         border-radius: 50%;
+         color: #000;
+         text-align:center;
+         background-color: rgba(0,0,0,0.00);
+         font-size:6px;
+         box-shadow: 0px 0px 2px rgba(0,0,0,1);
+         transition: all 0.2s ease;
+         }
+         .round-button:hover {
+         background-color: rgba(0,0,0,0.0);
+         box-shadow: 0px 0px 4px rgba(0,0,0,1);
+         }
+         .round-button:active {
+         background-color: rgba(0,0,0,0.01);
+         box-shadow: 0px 0px 1px rgba(0,0,0,1);
+         }
+      </style>
+   </head>
+   <body>
+     <div class="main">
+       <article>
+         <header>
+            <h1>Introducing Linear Prediction to GAN-based Vocoders</h1>
+         </header>
+      </article>
+      <div>
+         <p><b>Authors:</b> Ivan Vovk, Vladimir Gogoryan, Vadim Popov, Tasnima Sadekova, Mikhail Kudinov</p>
+      </div>
+      <div>
+      <p><b>Abstract:</b> One of the most popular autoregressive neural vocoders LPCNet and its multi-band version FeatherWave achieved state-of-the-art efficiency because they were based on Linear Predictive Coding. However, their autoregressive nature is still one of the main limitations in terms of inference speed. At the same time, recent advances in GAN-based vocoders allowed TTS community to train extremely fast parallel neural networks capable of generating high-fidelity waveforms. In this paper we introduce LPC-MelGAN, a GAN-based parallel vocoder utilizing the concept of Linear Prediction. The model we propose produces speech of reasonably good quality as demonstrated in a series of experiments on different datasets. Like MelGAN and its variants, LPC-MelGAN is very fast: our PyTorch implementation reaches 0.09 RTF without any hardware-specific optimization, which results in approximately 2.5x speedup compared to LPCNet.</a></p>
+      <h3>
+        LPC-MelGAN architecture:
+      </h3>
+      <p style="color:red;"><b></b></p>
+      <img src="imgs/lpc-melgan.png" width="400px" class="center">
+      <br/>
+      
+      <h3>Samples on English female (LJSpeech):</h3>
+<table style="margin-left:auto;margin-right:auto;">
+         <tbody>
+            <tr>
+               <td nowrap></td>
+               <td>Ground Truth (22kHz)</td>
+               <td>LPC-MelGAN (22kHz)</td>
+               <td>LPCNet (16kHz)</td>
+            </tr>
+            <tr>
+               <td nowrap><span class="text_e2e">Sample 1</span></td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/ljspeech/0_GT.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/ljspeech/0_LPCMelGAN.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/ljspeech/0_lpcnet.wav">
+                  </audio>
+               </td>
+            </tr>
+            <tr>
+               <td nowrap><span class="text_e2e">Sample 2</span></td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/ljspeech/1_GT.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/ljspeech/1_LPCMelGAN.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/ljspeech/1_lpcnet.wav">
+                  </audio>
+               </td>
+            </tr>
+            <tr>
+               <td nowrap><span class="text_e2e">Sample 3</span></td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/ljspeech/2_GT.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/ljspeech/2_LPCMelGAN.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/ljspeech/2_lpcnet.wav">
+                  </audio>
+               </td>
+            </tr>
+            <tr>
+               <td nowrap><span class="text_e2e">Sample 4</span></td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/ljspeech/3_GT.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/ljspeech/3_LPCMelGAN.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/ljspeech/3_lpcnet.wav">
+                  </audio>
+               </td>
+            </tr>
+         </tbody>
+      </table>
+
+      <h3>Samples on French male (CSS10):</h3>
+<table style="margin-left:auto;margin-right:auto;">
+         <tbody>
+            <tr>
+               <td nowrap></td>
+               <td>Ground Truth (22kHz)</td>
+               <td>LPC-MelGAN (22kHz)</td>
+               <td>LPCNet (16kHz)</td>
+            </tr>
+            <tr>
+               <td nowrap><span class="text_e2e">Sample 1</span></td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/french/0_GT.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/french/0_LPCMelGAN.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/french/0_lpcnet.wav">
+                  </audio>
+               </td>
+            </tr>
+            <tr>
+               <td nowrap><span class="text_e2e">Sample 2</span></td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/french/1_GT.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/french/1_LPCMelGAN.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/french/1_lpcnet.wav">
+                  </audio>
+               </td>
+            </tr>
+            <tr>
+               <td nowrap><span class="text_e2e">Sample 3</span></td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/french/2_GT.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/french/2_LPCMelGAN.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/french/2_lpcnet.wav">
+                  </audio>
+               </td>
+            </tr>
+            <tr>
+               <td nowrap><span class="text_e2e">Sample 4</span></td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/french/3_GT.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/french/3_LPCMelGAN.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/french/3_lpcnet.wav">
+                  </audio>
+               </td>
+            </tr>
+         </tbody>
+      </table>
+
+      <h3>Samples on German female (CSS10):</h3>
+<table style="margin-left:auto;margin-right:auto;">
+         <tbody>
+            <tr>
+               <td nowrap></td>
+               <td>Ground Truth (22kHz)</td>
+               <td>LPC-MelGAN (22kHz)</td>
+               <td>LPCNet (16kHz)</td>
+            </tr>
+            <tr>
+               <td nowrap><span class="text_e2e">Sample 1</span></td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/german/0_GT.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/german/0_LPCMelGAN.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/german/0_lpcnet.wav">
+                  </audio>
+               </td>
+            </tr>
+            <tr>
+               <td nowrap><span class="text_e2e">Sample 2</span></td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/german/1_GT.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/german/1_LPCMelGAN.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/german/1_lpcnet.wav">
+                  </audio>
+               </td>
+            </tr>
+            <tr>
+               <td nowrap><span class="text_e2e">Sample 3</span></td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/german/2_GT.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/german/2_LPCMelGAN.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/german/2_lpcnet.wav">
+                  </audio>
+               </td>
+            </tr>
+            <tr>
+               <td nowrap><span class="text_e2e">Sample 4</span></td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/german/3_GT.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/german/3_LPCMelGAN.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/german/3_lpcnet.wav">
+                  </audio>
+               </td>
+            </tr>
+         </tbody>
+      </table>
+
+      <h3>Samples on Spanish male (CSS10):</h3>
+<table style="margin-left:auto;margin-right:auto;">
+         <tbody>
+            <tr>
+               <td nowrap></td>
+               <td>Ground Truth (22kHz)</td>
+               <td>LPC-MelGAN (22kHz)</td>
+               <td>LPCNet (16kHz)</td>
+            </tr>
+            <tr>
+               <td nowrap><span class="text_e2e">Sample 1</span></td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/spanish/0_GT.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/spanish/0_LPCMelGAN.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/spanish/0_lpcnet.wav">
+                  </audio>
+               </td>
+            </tr>
+            <tr>
+               <td nowrap><span class="text_e2e">Sample 2</span></td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/spanish/1_GT.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/spanish/1_LPCMelGAN.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/spanish/1_lpcnet.wav">
+                  </audio>
+               </td>
+            </tr>
+            <tr>
+               <td nowrap><span class="text_e2e">Sample 3</span></td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/spanish/2_GT.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/spanish/2_LPCMelGAN.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/spanish/2_lpcnet.wav">
+                  </audio>
+               </td>
+            </tr>
+            <tr>
+               <td nowrap><span class="text_e2e">Sample 4</span></td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/spanish/3_GT.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/spanish/3_LPCMelGAN.wav">
+                  </audio>
+               </td>
+               <td>
+                  <audio controls="">
+                     <source src="wavs/spanish/3_lpcnet.wav">
+                  </audio>
+               </td>
+            </tr>
+         </tbody>
+      </table>
+     </div>
+   </body>
+</html>
