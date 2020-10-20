@@ -1,4 +1,4 @@
-# LPCMelGAN-ICAASP21.github.io
+# LPCMelGAN.github.io
 
 ## Introducing Linear Prediction to GAN-based Vocoders
 
